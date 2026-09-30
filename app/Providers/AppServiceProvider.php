@@ -20,9 +20,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-            URL::forceScheme('https');
-        } elseif (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'trycloudflare.com')) {
+        if (
+            $this->app->environment('production') ||
+            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+            (isset($_SERVER['HTTP_HOST']) && (
+                str_contains($_SERVER['HTTP_HOST'], 'trycloudflare.com') ||
+                str_contains($_SERVER['HTTP_HOST'], 'railway.app') ||
+                str_contains($_SERVER['HTTP_HOST'], 'up.railway.app') ||
+                str_contains($_SERVER['HTTP_HOST'], 'onrender.com')
+            ))
+        ) {
             URL::forceScheme('https');
         }
     }

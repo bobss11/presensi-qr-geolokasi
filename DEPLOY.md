@@ -8,35 +8,26 @@ Berikut adalah 3 opsi terbaik, mulai dari yang termudah & gratis hingga hosting 
 
 ## 🌟 OPSI 1: Railway.app (Paling Mudah, Cepat & Otomatis) - REKOMENDASI
 
-Railway adalah platform cloud PaaS modern yang secara otomatis mendeteksi aplikasi Laravel dan menyediakan database MySQL dengan 1 klik.
+Railway adalah platform cloud PaaS modern yang otomatis mendeteksi aplikasi Laravel dan menyediakan database MySQL dengan 1 klik. Semua konfigurasi otomatis (`railway.json`, `Procfile`, `nixpacks.toml`, dan seeder database) sudah disiapkan di dalam proyek ini.
 
 ### Langkah-Langkah:
 
-### 1. Upload Kodingan ke GitHub
-1. Buka [GitHub.com](https://github.com/) dan buat repository baru (misal: `presensi-qr-geolokasi`, set ke *Private* atau *Public*).
-2. Di terminal folder proyek ini, jalankan perintah berikut (ganti URL dengan repository GitHub Anda):
-   ```bash
-   git remote add origin https://github.com/USERNAME-ANDA/presensi-qr-geolokasi.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-### 2. Hubungkan ke Railway
+### 1. Hubungkan ke Railway
 1. Buka [Railway.app](https://railway.app/) dan klik **Login with GitHub**.
 2. Klik tombol **New Project** $\rightarrow$ pilih **Deploy from GitHub repo**.
-3. Pilih repository `presensi-qr-geolokasi`.
+3. Pilih repository Anda: **`bobss11/presensi-qr-geolokasi`**.
 
-### 3. Buat Database MySQL
-1. Di dalam canvas project Railway, klik tombol **New** $\rightarrow$ pilih **Database** $\rightarrow$ klik **Add MySQL**.
+### 2. Buat Database MySQL Cloud
+1. Di dalam canvas project Railway, klik tombol **New** (atau tekan `Ctrl + K`) $\rightarrow$ pilih **Database** $\rightarrow$ klik **Add MySQL**.
 2. Railway otomatis menyiapkan database MySQL cloud dalam hitungan detik.
 
-### 4. Konfigurasi Environment Variables (Variabel Lingkungan)
-1. Klik pada service aplikasi Laravel Anda $\rightarrow$ buka tab **Variables**.
-2. Tambahkan variabel berikut:
+### 3. Konfigurasi Environment Variables (Variabel Lingkungan)
+1. Klik pada service aplikasi Anda (**presensi-qr-geolokasi**) $\rightarrow$ buka tab **Variables**.
+2. Klik **New Variable** (atau **Raw Editor**) dan masukkan variabel berikut:
    * `APP_NAME` = `Presensi Mahasiswa`
    * `APP_ENV` = `production`
    * `APP_DEBUG` = `false`
-   * `APP_KEY` = *(Salin nilai APP_KEY dari file `.env` lokal Anda)*
+   * `APP_KEY` = `base64:GMcsz0/JQNU/o+1Q9M9jLuCzkpG+amA8H0DskkR+JoE=`
    * `DB_CONNECTION` = `mysql`
    * `DB_HOST` = `${{MySQL.MYSQLHOST}}`
    * `DB_PORT` = `${{MySQL.MYSQLPORT}}`
@@ -44,19 +35,22 @@ Railway adalah platform cloud PaaS modern yang secara otomatis mendeteksi aplika
    * `DB_USERNAME` = `${{MySQL.MYSQLUSER}}`
    * `DB_PASSWORD` = `${{MySQL.MYSQLPASSWORD}}`
 
-### 5. Generate Domain Publik HTTPS
-1. Buka tab **Settings** pada service aplikasi Laravel $\rightarrow$ cari bagian **Networking** $\rightarrow$ klik **Generate Domain**.
+   *(Catatan: `${{MySQL.MYSQLHOST}}` dst. otomatis mengambil data dari database MySQL yang baru dibuat di Railway).*
+
+### 4. Generate Domain Publik HTTPS
+1. Buka tab **Settings** pada service aplikasi $\rightarrow$ cari bagian **Networking** $\rightarrow$ klik **Generate Domain**.
 2. Anda akan mendapatkan URL HTTPS permanen (contoh: `https://presensi-mahasiswa-production.up.railway.app`).
 3. Tambahkan satu variabel lagi di tab **Variables**:
-   * `APP_URL` = `https://presensi-mahasiswa-production.up.railway.app`
+   * `APP_URL` = `https://presensi-mahasiswa-production.up.railway.app` *(sesuaikan dengan domain yang didapat)*
 
-### 6. Jalankan Migrasi & Seeder Database
-Di tab **Deployments** $\rightarrow$ klik tombol menu titik tiga $\rightarrow$ **View Logs** atau buka terminal web Railway $\rightarrow$ jalankan:
+### 5. Migrasi & Seeder Database (Otomatis!)
+File `railway.json` & `Procfile` yang sudah dipasang di repository ini akan secara otomatis menjalankan:
 ```bash
 php artisan migrate --force --seed
 ```
+Saat deployment selesai, database langsung terisi akun Dosen (`dosen@kampus.ac.id`), 12 akun Mahasiswa (`budi@kampus.ac.id`, dll.), serta jadwal kuliah siap pakai! Password default seluruh akun: `password`.
 
-✅ **Selesai!** Aplikasi Anda sekarang online 24 jam nonstop dengan HTTPS resmi.
+✅ **Selesai!** Aplikasi Anda sekarang online 24 jam nonstop di internet tanpa laptop harus menyala.
 
 ---
 
