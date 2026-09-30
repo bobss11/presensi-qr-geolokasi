@@ -8,15 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pertemuan', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('jadwal_kuliah_id')->constrained('jadwal_kuliah')->onDelete('cascade');
-            $table->unsignedInteger('pertemuan_ke');
-            $table->string('qr_token', 64)->unique();
-            $table->timestamp('qr_expires_at');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('pertemuan')) {
+            Schema::create('pertemuan', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('jadwal_kuliah_id')->constrained('jadwal_kuliah')->onDelete('cascade');
+                $table->unsignedInteger('pertemuan_ke');
+                $table->string('qr_token', 64)->unique();
+                $table->timestamp('qr_expires_at');
+                $table->boolean('is_active')->default(true);
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void

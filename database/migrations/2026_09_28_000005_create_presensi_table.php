@@ -8,19 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('presensi', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pertemuan_id')->constrained('pertemuan')->onDelete('cascade');
-            $table->foreignId('mahasiswa_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['Hadir', 'Tidak Hadir'])->default('Hadir');
-            $table->timestamp('waktu_presensi')->nullable();
-            $table->decimal('latitude_mahasiswa', 10, 8)->nullable();
-            $table->decimal('longitude_mahasiswa', 11, 8)->nullable();
-            $table->double('jarak_meter')->nullable();
-            $table->timestamps();
+        if (! Schema::hasTable('presensi')) {
+            Schema::create('presensi', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('pertemuan_id')->constrained('pertemuan')->onDelete('cascade');
+                $table->foreignId('mahasiswa_id')->constrained('users')->onDelete('cascade');
+                $table->enum('status', ['Hadir', 'Tidak Hadir'])->default('Hadir');
+                $table->timestamp('waktu_presensi')->nullable();
+                $table->decimal('latitude_mahasiswa', 10, 8)->nullable();
+                $table->decimal('longitude_mahasiswa', 11, 8)->nullable();
+                $table->double('jarak_meter')->nullable();
+                $table->timestamps();
 
-            $table->unique(['pertemuan_id', 'mahasiswa_id']);
-        });
+                $table->unique(['pertemuan_id', 'mahasiswa_id']);
+            });
+        }
     }
 
     public function down(): void

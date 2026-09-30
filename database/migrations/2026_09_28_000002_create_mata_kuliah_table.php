@@ -8,12 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('mata_kuliah', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode_mk')->unique();
-            $table->string('nama_mk');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('mata_kuliah')) {
+            Schema::create('mata_kuliah', function (Blueprint $table) {
+                $table->id();
+                $table->string('kode_mk')->unique();
+                $table->string('nama_mk');
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void

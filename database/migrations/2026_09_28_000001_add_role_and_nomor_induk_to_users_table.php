@@ -9,8 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['dosen', 'mahasiswa'])->default('mahasiswa')->after('email');
-            $table->string('nomor_induk')->nullable()->unique()->after('role');
+            if (! Schema::hasColumn('users', 'role')) {
+                $table->enum('role', ['dosen', 'mahasiswa'])->default('mahasiswa')->after('email');
+            }
+            if (! Schema::hasColumn('users', 'nomor_induk')) {
+                $table->string('nomor_induk')->nullable()->unique()->after('role');
+            }
         });
     }
 
