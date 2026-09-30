@@ -1,18 +1,26 @@
 #!/bin/sh
+set -e
 
-# Migrations and seeding
+echo "==> Menjalankan migrasi database..."
 php artisan migrate --force || true
+
+echo "==> Menjalankan seeder database..."
 php artisan db:seed --force || true
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
 
-# Configure Nginx port from environment
+echo "==> Cache konfigurasi Laravel..."
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
+
 PORT="${PORT:-8080}"
-sed -i "s/listen 8080/listen $PORT/" /etc/nginx/http.d/default.conf
+echo "==> Mengatur Nginx mendengarkan pada port ${PORT}..."
+sed -i "s/listen [0-9]*/listen ${PORT}/" /etc/nginx/http.d/default.conf
 
-# Start PHP-FPM daemon
+# Validasi konfigurasi Nginx
+nginx -t
+
+echo "==> Menjalankan PHP-FPM..."
 php-fpm -D
 
-# Start Nginx in foreground (keeps container alive)
+echo "==> Menjalankan Nginx di foreground pada port ${PORT}..."
 exec nginx -g 'daemon off;'
