@@ -13,4 +13,4 @@ php artisan view:clear
 
 PORT="${PORT:-8080}"
 echo "==> Menjalankan server pada port $PORT..."
-exec php -S "0.0.0.0:${PORT}" -t public public/index.php
+exec php artisan serve --host=0.0.0.0 --port="${PORT}"
